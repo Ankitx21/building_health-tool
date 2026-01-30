@@ -121,7 +121,7 @@ const beeEquations = {
 let climateRawData = [];
 let cityClimateMap = {};
 
-fetch("Location_CZ_Latitude_cleaned.json")
+fetch("Location_CZ_Latitude.json")
   .then(res => res.json())
   .then(data => {
     climateRawData = data;
@@ -982,4 +982,5 @@ const resultsEl = document.getElementById("results");
   void resultsEl.offsetWidth; // 👈 forces reflow
   resultsEl.classList.add("results-refresh");
 }
+
 
