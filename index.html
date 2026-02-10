@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Building Health Tool</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <h1>Building Health Tool</h1>
+      <p>Evaluate the Performance of your building</p>
+    </header>
+
+    <!-- MAIN GRID -->
+    <main class="main-grid">
+
+      <!-- LEFT : INPUTS -->
+      <section class="card">
+
+        <label>Building Type</label>
+        <select id="buildingType">
+          <option>Office</option>
+        </select>
+
+        <!--state and cities of India-->
+
+        <div class="inline">
+          <div class="field">
+            <label for="state">State</label>
+            <select id="state">
+              <option value="">Select State</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="city">City</label>
+            <select id="city" disabled>
+              <option value="">Select City</option>
+            </select>
+          </div>
+        </div>
+
+
+
+        <!-- BUILT-UP + AC AREA (SIDE BY SIDE) -->
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label class="field-label">
+              Built-up Area (m²) - 
+              <span class="label-note">(Excluding parking)</span>
+            </label>
+            <input type="number" id="area" placeholder="e.g. 6000">
+          </div>
+
+          <div class="form-group">
+            <label>Air-conditioned Area (%)</label>
+            <input type="number" id="acArea" placeholder="e.g. 80">
+          </div>
+        </div>
+
+        <!-- TOTAL OCCUPANTS (FULL WIDTH) -->
+        <div class="form-group">
+          <label>Total Number of Occupants</label>
+          <input type="number" id="occupants" placeholder="e.g. 350">
+        </div>
+
+
+
+        <!-- ENERGY -->
+        <!-- <h2>Energy Performance</h2> -->
+
+        <label>Electricity Consumption</label>
+        <div class="inline">
+          <input type="number" id="energy" placeholder="e.g. 250000">
+          <select id="energyPeriod">
+            <option value="monthly">Monthly Average (kWh)</option>
+            <option value="annual">Annual (kWh)</option>           
+          </select>
+        </div>
+
+        <label>Installed AC Capacity (TR)</label>
+        <input type="number" id="acCapacity" placeholder="e.g. 300">
+
+        <!-- CONTRACT DEMAND + DG SET (SIDE BY SIDE) -->
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label>Contract Demand (kVA)</label>
+            <input
+              type="number"
+              id="contractDemand"
+              placeholder="e.g. 450"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>DG Set Size (kVA)</label>
+            <input
+              type="number"
+              id="dgSize"
+              placeholder="e.g. 500"
+            >
+          </div>
+        </div>
+
+
+        <label id="renewableLabel">
+          Renewable Energy Generation (Annual kWh)
+        </label>
+
+        <input
+          type="number"
+          id="renewableValue"
+          placeholder="e.g. 250000"
+        />
+
+        <label>
+          Water Consumption (Annual kilolitres)
+        </label>
+
+        <input
+          type="number"
+          id="water"
+          placeholder="e.g. 12000"
+        />
+
+        <button id="assessBtn">Assess My Building</button>
+      </section>
+
+      <!-- RIGHT : RESULTS -->
+<section class="card hidden" id="results">
+
+
+      <!-- ================= SUMMARY ================= -->
+      <div class="result-block">
+        <div class="bee-rating-block">
+          <div class="bee-rating-title">
+            BEE Star Rating :
+          </div>
+
+          <div id="outStarRating" class="bee-rating-value">
+            —
+          </div>
+        </div>
+      <!-- </div> -->
+
+
+        <!-- epi progress bar -->
+
+        <!-- ================= EPI PROGRESS BAR ================= -->
+
+      <div class="epi-card">
+        <div class="epi-title-row">
+          <strong>Energy Performance Index (EPI)</strong>
+
+          <span class="epi-info">
+            ⓘ
+            <span class="epi-tooltip">
+              Lower EPI means higher energy efficiency
+            </span>
+          </span>
+        </div>
+
+
+        <div class="epi-bar-wrapper">
+
+          <!-- LABELS ON TOP -->
+          <div class="epi-label assure-label" id="assureLabel">
+            ASSURE Target<br>
+            <b> 75 kWh/m²/yr</b>
+          </div>
+
+          <div class="epi-label building-label" id="buildingLabel">
+            Your Building EPI<br>
+            <b><span id="buildingEpiText">—</span> kWh/m²/yr</b>
+          </div>
+
+          <!-- SCALE (BAR + STARS SHARE SAME WIDTH) -->
+        <div class="epi-scale">
+
+          <!-- BAR -->
+          <div class="epi-bar">
+            <div class="epi-fill"></div>
+            <div class="epi-marker assure-marker"></div>
+            <div class="epi-marker building-marker"></div>
+          </div>
+
+          <!-- STAR SCALE (ticks + stars together) -->
+            <div class="epi-star-scale" id="epiStarScale">
+
+              <div class="epi-star-group" data-star="5">
+                <div class="star-tick"></div>
+                <div class="star-icon">★</div>
+                <div class="star-num">5</div>
+              </div>
+
+              <div class="epi-star-group" data-star="4">
+                <div class="star-tick"></div>
+                <div class="star-icon">★</div>
+                <div class="star-num">4</div>
+              </div>
+
+              <div class="epi-star-group" data-star="3">
+                <div class="star-tick"></div>
+                <div class="star-icon">★</div>
+                <div class="star-num">3</div>
+              </div>
+
+              <div class="epi-star-group" data-star="2">
+                <div class="star-tick"></div>
+                <div class="star-icon">★</div>
+                <div class="star-num">2</div>
+              </div>
+
+              <div class="epi-star-group" data-star="1">
+                <div class="star-tick"></div>
+                <div class="star-icon">★</div>
+                <div class="star-num">1</div>
+              </div>
+
+            </div>
+
+
+        </div>
+        </div>
+
+  <div class="epi-message" id="epiMessage"></div>
+</div>
+
+
+
+
+
+        <div class="net-energy-block">
+          <div class="net-energy-title">
+            Net Energy Status :
+          </div>
+
+          <div id="outNetEnergy" class="net-energy-value">
+            —
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= HVAC & ELECTRICAL ================= -->
+      <div class="result-block">
+
+        <div id="outHvac"></div>
+        <div id="outDemand"></div>
+      </div>
+
+
+      <!-- ================= WATER ================= -->
+      <div class="result-block">
+        <!-- <h3>Water</h3> -->
+
+        <p>
+          <!-- <strong>Water Efficiency:</strong> -->
+          <span id="outWater">—</span>
+        </p>
+      </div>
+
+    </section>
+
+
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

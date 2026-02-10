@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Health Tool</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb;
+        }
+        .container-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            border: 1px solid #d1d5db;
+        }
+        .card {
+            background-color: #f9fafb;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            border: 1px solid #d1d5db;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .button-primary {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            background-image: linear-gradient(to right, #4c51bf, #667eea);
+            color: #ffffff;
+            font-weight: 700;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .rating-badge {
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            text-align: center;
+        }
+        .rating-excellent {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
+        .rating-good {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+        .rating-fair {
+            background-color: #fef9c3;
+            color: #f59e0b;
+        }
+        .rating-poor {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+        .building-entry {
+            border: 1px solid #d1d5db;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #ffffff;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .building-entry:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto container-card">
+        <h1 class="text-4xl font-extrabold text-center mb-4 text-gray-900">Building Health Tool</h1>
+        <p class="text-center text-gray-600 mb-8">Evaluate the energy and IEQ performance of your commercial office building.</p>
+
+
+
+SECTION 1
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Left Panel: Input Section -->
+            <div class="space-y-6">
+          <!-- 1) General Building Info -->
+<div class="card">
+  <h2 class="text-xl font-semibold text-gray-700 mb-4">General Building Info</h2>
+  <div class="space-y-4">
+    <div class="input-group">
+
+
+ASKING FOR BUILDING TYPE
+      <label for="building-type" class="block font-medium text-gray-600 mb-1">Building Type</label>
+      <select id="building-type" class="input-field">
+        <option value="Office" selected>Office</option>
+        <!-- add more if needed -->
+      </select>
+    </div>
+
+ASKING FOR THE CITY
+
+                   	<div class="input-group">
+                        	<label for="city-dropdown" class="block font-medium text-gray-600 mb-1">City</label>
+                        	<select id="city-dropdown" class="input-field">
+                            	<option value="Ahmedabad">Ahmedabad</option>
+                            	<option value="Bengaluru">Bengaluru</option>
+                            	<option value="Bhubhaneshwar">Bhubhaneshwar</option>
+                            	<option value="Chandigarh">Chandigarh</option>
+                            	<option value="Chennai">Chennai</option>
+                            	<option value="Cochin">Cochin</option>
+                            	<option value="Coimbatore">Coimbatore</option>
+                            	<option value="Delhi NCR">Delhi NCR</option>
+                            	<option value="Gauhati">Gauhati</option>
+                            	<option value="Hyderabad">Hyderabad</option>
+                            	<option value="Jaipur">Jaipur</option>
+                            	<option value="Kolkata">Kolkata</option>
+                            	<option value="Mangaluru">Mangaluru</option>
+                            	<option value="Mumbai">Mumbai</option>
+                            	<option value="Mysuru">Mysuru</option>
+                            	<option value="Nagpur">Nagpur</option>
+                            	<option value="Pune">Pune</option>
+                        	</select>
+                    	</div>
+
+
+ASKING FOR BUILT UP AREA
+    <div class="input-group">
+      <label for="area-sqm" class="block font-medium text-gray-600 mb-1">Built Up Area (m²)</label>
+      <input type="number" id="area-sqm" class="input-field" placeholder="e.g., 5000" min="0" step="0.01">
+    </div>
+  </div>
+</div>
+ 
+
+SECTION 2
+<!-- 2) Energy Performance -->
+<div class="card">
+  <h2 class="text-xl font-semibold text-gray-700 mb-4">Energy Performance</h2>
+  <div class="space-y-4">
+    <div class="input-group">
+
+
+ASKING FOR ENERGY CONSUMPTION
+      <label class="block font-medium text-gray-600 mb-1">Electricity Consumption</label>
+      <div class="grid grid-cols-3 gap-3">
+        <input type="number" id="energy-consumption" class="input-field col-span-2" placeholder="e.g., 250000" min="0" step="0.01">
+        <select id="energy-period" class="input-field">
+          <option value="annual" selected>Annual (kWh)</option>
+          <option value="monthly">Monthly (kWh)</option>
+        </select>
+      </div>
+    </div>
+ 
+
+COOLING CAPACITY
+    <div class="input-group">
+      <label for="cooling-capacity" class="block font-medium text-gray-600 mb-1">Installed Air Conditioning Capacity (TR)</label>
+      <input type="number" id="cooling-capacity" class="input-field" placeholder="e.g., 300" min="0" step="0.1">
+    </div>
+
+CONTRACT DEMAND
+    <div class="input-group">
+      <label for="contract-demand" class="block font-medium text-gray-600 mb-1">Contract Demand (kVA)</label>
+      <input type="number" id="contract-demand" class="input-field" placeholder="e.g., 450" min="0" step="0.1">
+    </div>
+ 
+
+DG Set Size
+    <div class="input-group">
+      <label for="dg-size" class="block font-medium text-gray-600 mb-1">DG Set Size (kVA)</label>
+      <input type="number" id="dg-size" class="input-field" placeholder="e.g., 500" min="0" step="0.1">
+    </div>
+
+Renewable energy installed
+
+    <div class="input-group">
+      <label class="block font-medium text-gray-600 mb-1">Renewable Energy Installed</label>
+      <div class="grid grid-cols-2 gap-3">
+        <input type="number" id="renewable-kwp" class="input-field" placeholder="kWp e.g., 200" min="0" step="0.1">
+        <input type="number" id="renewable-percent" class="input-field" placeholder="% of total demand e.g., 15" min="0" max="100" step="0.1">
+      </div>
+    </div>
+ 
+AIR CONDITIONED AREA
+    <!-- Keep existing: AC area %, Daylight, CO2, Noise, Temp if you still want them here or move as you prefer -->
+    <div class="input-group">
+      <label for="ac-area-percentage" class="block font-medium text-gray-600 mb-1">Air-conditioned Area (%)</label>
+      <input type="number" id="ac-area-percentage" class="input-field" placeholder="e.g., 80" min="0" max="100">
+    </div>
+  </div>
+</div>
+
+
+
+ SECTION 3
+<!-- 3) Water Efficiency -->
+<div class="card">
+  <h2 class="text-xl font-semibold text-gray-700 mb-4">Water Efficiency</h2>
+  <div class="space-y-4">
+
+
+WATER USE
+        <div class="input-group">
+  <label for="lpcd" class="block font-medium text-gray-600 mb-1">Water Use (LPCD)</label>
+  <input type="number" id="lpcd" class="input-field" placeholder="e.g., 40" min="0" step="0.1">
+</div>
+
+
+WATER CONSUMPTION
+<label class="block font-medium text-gray-600 mb-1">Water Consumption</label>
+      <div class="grid grid-cols-3 gap-3">
+        <input type="number" id="water-consumption" class="input-field col-span-2" placeholder="e.g., 120000" min="0" step="0.01">
+        <select id="water-period-unit" class="input-field">
+          <option value="annual_litres" selected>Annual (litres)</option>
+          <option value="monthly_litres">Monthly (litres)</option>
+          <option value="annual_m3">Annual (m³)</option>
+          <option value="monthly_m3">Monthly (m³)</option>
+        </select>
+      </div>
+    </div>
+ 
+
+RECYCLED WATER
+    <div class="input-group">
+      <label class="block font-medium text-gray-600 mb-1">% Recycled / Treated Water Use</label>
+      <div class="grid grid-cols-2 gap-3">
+        <input type="number" id="recycled-percent" class="input-field" placeholder="% e.g., 25" min="0" max="100" step="0.1">
+        <input type="number" id="recycled-volume" class="input-field" placeholder="Litres e.g., 30000" min="0" step="0.01">
+      </div>
+    </div>
+
+
+ RAINWATER HARVESTING
+    <div class="input-group">
+      <label for="rwh" class="block font-medium text-gray-600 mb-1">Rainwater Harvesting System</label>
+      <select id="rwh" class="input-field">
+        <option value="Yes">Yes</option>
+        <option value="No" selected>No</option>
+      </select>
+    </div>
+</div>
+
+
+
+RESULTS SECTION STARTS FROM HERE 
+ 
+                <button id="calculate-btn" class="button-primary">Assess My Building</button>
+            </div>
+            <!-- Right Panel: Dashboard Section -->
+            <div class="space-y-6">
+                <div class="card" id="dashboard-section" style="display: none;">
+<h2 class="text-xl font-semibold text-gray-700 mb-4">Your Building's Performance</h2>
+
+<!-- Summary -->
+<div class="card">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Summary</h3>
+  <div class="space-y-4">
+    <div class="result-item">
+      <span>City:</span>
+      <span id="city-output" class="font-semibold text-gray-800"></span>
+    </div>
+    <div class="result-item">
+      <span>Climate Zone:</span>
+      <span id="climate-zone-output" class="font-semibold text-gray-800"></span>
+    </div>
+    <div class="result-item">
+      <span>Energy Performance Index (EPI):</span>
+      <span id="epi-output" class="font-semibold text-gray-800"></span>
+    </div>
+<div class="result-item">
+  <span>Assure EPI Comparison (Target ≤ 75 kWh/m²/yr):</span>
+  <span id="assure-epi-output" class="font-semibold text-gray-800"></span>
+</div>
+    <div class="result-item">
+      <span>Net Energy Status:</span>
+      <span id="net-status-output" class="font-semibold text-gray-800"></span>
+    </div>
+    <div class="result-item">
+      <span>BEE Star Rating:</span>
+      <span id="star-rating-output" class="font-bold text-lg"></span>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- HVAC & Electrical -->
+<div class="card">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">HVAC & Electrical</h3>
+  <div class="space-y-4">
+    <div class="result-item">
+      <span>HVAC sizing (Assure KPI: 700–800 sqft/TR):</span>
+      <span id="hvac-sizing-output" class="font-semibold text-gray-800"></span>
+    </div>
+    <div class="result-item">
+      <span>Contract Demand / DG set sizing (Assure KPI: &lt; 5 W/sqft):</span>
+      <span id="demand-kpi-output" class="font-semibold text-gray-800"></span>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Water -->
+<div class="card">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Water</h3>
+  <div class="space-y-4">
+    <div class="result-item">
+      <span>Water Efficiency (NBC 45 lpcd):</span>
+      <span id="water-efficiency-output" class="font-semibold text-gray-800"></span>
+    </div>
+    <!-- Optional: keep total if you like, the JS already fills this -->
+    <!--
+    <div class="result-item">
+      <span>Total Water Consumption:</span>
+      <span id="water-consumption-output" class="font-semibold text-gray-800"></span>
+    </div>
+    -->
+  </div>
+</div>
+                <div id="all-buildings-dashboard" class="space-y-6" style="display: none;">
+                	<div class="card">
+                    	<h2 class="text-xl font-semibold text-gray-700">All Buildings Assessed</h2>
+                    	<p class="text-gray-500 text-sm mt-2">Your unique user ID is: <span id="user-id-display" class="font-mono text-xs text-gray-700 break-all"></span></p>
+                    	<div id="buildings-list" class="mt-4">
+                        	<!-- Building entries will be dynamically added here -->
+                    	</div>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDKs →: 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+ 
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+ 
+        let db, auth, userId;
+ 
+        // Initialize Firebase
+        async function initializeFirebase() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+ 
+                onAuthStateChanged(auth, async (user) => {
+                	if (user) {
+                    	userId = user.uid;
+                        document.getElementById('user-id-display').textContent = userId;
+                    	console.log("User authenticated:", userId);
+                    	listenToBuildingData();
+                	} else {
+                    	userId = crypto.randomUUID();
+                        document.getElementById('user-id-display').textContent = userId;
+                    	console.log("User signed in anonymously with ID:", userId);
+                	}
+                });
+ 
+                if (initialAuthToken) {
+                	await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                	await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+            }
+        }
+
+
+ 
+        // Listen for real-time updates to the building data
+        function listenToBuildingData() {
+            if (!db) return;
+            const buildingsCollection = collection(db, `artifacts/${appId}/public/data/buildings`);
+            const q = query(buildingsCollection);
+ 
+            onSnapshot(q, (snapshot) => {
+                const buildingsListElement = document.getElementById('buildings-list');
+                buildingsListElement.innerHTML = '';
+                snapshot.forEach((doc) => {
+                	const data = doc.data();
+                	const buildingEntry = createBuildingEntry(data);
+                    buildingsListElement.appendChild(buildingEntry);
+                });
+                document.getElementById('all-buildings-dashboard').style.display = 'block';
+            });
+        }
+ 
+        function createBuildingEntry(data) {
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'building-entry';
+            entryDiv.innerHTML = `
+                <p class="text-sm text-gray-500 mb-2">Assessed by: <span class="font-mono text-xs text-gray-700 break-all">${data.userId}</span></p>
+                <div class="result-item">
+                	<span class="font-medium text-gray-600">City:</span>
+                	<span class="font-semibold text-gray-800">${data.city}</span>
+                </div>
+    <div class="result-item">
+        <span class="font-medium text-gray-600">Building Size:</span>
+        <span class="font-semibold text-gray-800">${data.buildingSize || '—'}</span>
+    </div>
+                <div class="result-item">
+                	<span class="font-medium text-gray-600">EPI:</span>
+               	<span class="font-semibold text-gray-800">
+  ${typeof data.epi === 'number' ? data.epi.toFixed(2) : '—'} kWh/sqm/year
+</span>
+ 
+                </div>
+<div class="result-item">
+  <span class="font-medium text-gray-600">Renewables:</span>
+  <span class="font-semibold text-gray-800">
+    ${(data.renewableGenKWh || 0).toLocaleString()} kWh
+    ${typeof data.energyAnnualKWh === 'number' && data.energyAnnualKWh > 0
+  	? ` (${((data.renewableGenKWh || 0) / data.energyAnnualKWh * 100).toFixed(1)}%)`
+  	: ''
+	}
+  </span>
+</div>
+ 
+<div class="result-item">
+    <span class="font-medium text-gray-600">Net Energy Status:</span>
+    <span class="font-semibold text-gray-800">
+        <span class="rating-badge ${data.netStatusClass || ''}">${data.netStatusText || '—'}</span>
+    </span>
+</div>
+<div class="result-item">
+    <span class="font-medium text-gray-600">Water (LPCD):</span>
+    <span class="font-semibold text-gray-800">
+        ${data.lpcd ?? '—'}
+        ${data.lpcdStatusText ? `<span class="rating-badge ${data.lpcdStatusClass}">${data.lpcdStatusText}</span>` : ''}
+    </span>
+</div>            `;
+            return entryDiv;
+        }
+ 
+        const cityData = {
+            "Ahmedabad": { city: "Ahmedabad", zone: "Hot & Dry", avgOutdoorTemp: 32 },
+            "Bengaluru": { city: "Bengaluru", zone: "Temperate", avgOutdoorTemp: 25 },
+            "Bhubhaneshwar": { city: "Bhubhaneshwar", zone: "Warm & Humid", avgOutdoorTemp: 29 },
+            "Chandigarh": { city: "Chandigarh", zone: "Composite", avgOutdoorTemp: 25 },
+            "Chennai": { city: "Chennai", zone: "Warm & Humid", avgOutdoorTemp: 30 },
+            "Cochin": { city: "Cochin", zone: "Warm & Humid", avgOutdoorTemp: 29 },
+            "Coimbatore": { city: "Coimbatore", zone: "Temperate", avgOutdoorTemp: 27 },
+            "Delhi NCR": { city: "Delhi NCR", zone: "Composite", avgOutdoorTemp: 27 },
+            "Gauhati": { city: "Gauhati", zone: "Warm & Humid", avgOutdoorTemp: 27 },
+            "Hyderabad": { city: "Hyderabad", zone: "Composite", avgOutdoorTemp: 28 },
+            "Jaipur": { city: "Jaipur", zone: "Hot & Dry", avgOutdoorTemp: 32 },
+            "Kolkata": { city: "Kolkata", zone: "Warm & Humid", avgOutdoorTemp: 29 },
+            "Mangaluru": { city: "Mangaluru", zone: "Warm & Humid", avgOutdoorTemp: 28 },
+            "Mumbai": { city: "Mumbai", zone: "Warm & Humid", avgOutdoorTemp: 28 },
+            "Mysuru": { city: "Mysuru", zone: "Temperate", avgOutdoorTemp: 24 },
+            "Nagpur": { city: "Nagpur", zone: "Composite", avgOutdoorTemp: 30 },
+            "Pune": { city: "Pune", zone: "Composite", avgOutdoorTemp: 26 },
+        };
+// =================== Size thresholds & helper ===================
+const SIZE_THRESHOLDS = {
+    SMALL_MAX: 10000,   // sqm (≤ 10,000)
+    MEDIUM_MAX: 30000   // sqm (>10,000 and ≤ 30,000)
+};
+ 
+// Return "Small" | "Medium" | "Large" based on area in sqm
+function getBuildingSize(areaSqm) {
+	if (areaSqm <= SIZE_THRESHOLDS.SMALL_MAX) return "Small";
+	if (areaSqm <= SIZE_THRESHOLDS.MEDIUM_MAX) return "Medium";
+    return "Large";
+}
+       // =================== Star-rating equations by zone AND size ===================
+// EPI limit = a * (AC area %) + c
+const beeEquations = {
+    "Composite": {
+        "Large": {
+            '5Star': { a: 0.75, c: 20 },
+            '4Star': { a: 0.80, c: 30 },
+            '3Star': { a: 0.85, c: 40 },
+            '2Star': { a: 0.90, c: 50 },
+            '1Star': { a: 0.95, c: 60 }
+        },
+        "Medium": {
+            '5Star': { a: 0.9, c: 20 },
+            '4Star': { a: 0.95, c: 30 },
+            '3Star': { a: 1, c: 40 },
+            '2Star': { a: 1.05, c: 50 },
+            '1Star': { a: 1.1, c: 60 }
+        },
+        "Small": {
+            '5Star': { a: 0.45, c: 20 },
+            '4Star': { a: 0.5, c: 30 },
+            '3Star': { a: 0.55, c: 40 },
+            '2Star': { a: 0.6, c: 50 },
+            '1Star': { a: 0.65, c: 60 }
+        }
+	},
+    "Warm & Humid": {
+        "Large": {
+            '5Star': { a: 0.7, c: 25 },
+            '4Star': { a: 0.75, c: 35 },
+            '3Star': { a: 0.8, c: 45 },
+            '2Star': { a: 0.85, c: 55 },
+            '1Star': { a: 0.9, c: 65 }
+        },
+        "Medium": {
+           '5Star': { a: 0.7, c: 25 },
+            '4Star': { a: 0.75, c: 35 },
+            '3Star': { a: 0.8, c: 45 },
+            '2Star': { a: 0.85, c: 55 },
+            '1Star': { a: 0.9, c: 65 }
+        },
+        "Small": {
+            '5Star': { a: 0.5, c: 25 },
+            '4Star': { a: 0.55, c: 35 },
+            '3Star': { a: 0.6, c: 45 },
+            '2Star': { a: 0.65, c: 55 },
+            '1Star': { a: 0.7, c: 65 }
+        }
+	},
+    "Hot & Dry": {
+        "Large": {
+            '5Star': { a: 0.9, c: 15 },
+            '4Star': { a: 0.95, c: 25 },
+            '3Star': { a: 1.0, c: 35 },
+            '2Star': { a: 1.05, c: 45 },
+            '1Star': { a: 1.1, c: 55 }
+        },
+        "Medium": {
+           '5Star': { a: 1.05, c: 15 },
+            '4Star': { a: 1.1, c: 25 },
+            '3Star': { a: 1.15, c: 35 },
+            '2Star': { a: 1.2, c: 45 },
+            '1Star': { a: 1.25, c: 55 }
+        },
+        "Small": {
+            '5Star': { a: 1.55, c: 15 },
+            '4Star': { a: 0.6, c: 25 },
+            '3Star': { a: 0.65, c: 35 },
+            '2Star': { a: 0.7, c: 45 },
+            '1Star': { a: 0.75, c: 55 }
+        }
+	},
+    "Temperate": {
+       "Large": {
+            '5Star': { a: 0.9, c: 15 },
+            '4Star': { a: 0.95, c: 25 },
+            '3Star': { a: 1.0, c: 35 },
+            '2Star': { a: 1.05, c: 45 },
+            '1Star': { a: 1.1, c: 55 }
+        },
+        "Medium": {
+           '5Star': { a: 1.05, c: 15 },
+            '4Star': { a: 1.1, c: 25 },
+            '3Star': { a: 1.15, c: 35 },
+            '2Star': { a: 1.2, c: 45 },
+            '1Star': { a: 1.25, c: 55 }
+        },
+        "Small": {
+            '5Star': { a: 1.55, c: 15 },
+            '4Star': { a: 0.6, c: 25 },
+            '3Star': { a: 0.65, c: 35 },
+            '2Star': { a: 0.7, c: 45 },
+            '1Star': { a: 0.75, c: 55 }
+ 	}
+	}
+};
+ 
+ 
+ 
+        const cityDropdown = document.getElementById('city-dropdown');
+        const acAreaPercentageInput = document.getElementById('ac-area-percentage');
+        const energyConsumptionInput = document.getElementById('energy-consumption');
+        const coolingCapacityInput = document.getElementById('cooling-capacity');
+        const contractDemandInput = document.getElementById('contract-demand');
+    	        const calculateBtn = document.getElementById('calculate-btn');
+        const dashboardSection = document.getElementById('dashboard-section');
+const hvacSizingOutput = document.getElementById('hvac-sizing-output');
+const demandKpiOutput  = document.getElementById('demand-kpi-output');
+const waterEffOutput   = document.getElementById('water-efficiency-output');
+const lpcdInput    	= document.getElementById('lpcd'); // only if you added the LPCD field
+        const cityOutput = document.getElementById('city-output');
+        const climateZoneOutput = document.getElementById('climate-zone-output');
+        const epiOutput = document.getElementById('epi-output');
+const assureEpiOutput = document.getElementById('assure-epi-output');
+        const starRatingOutput = document.getElementById('star-rating-output');
+const buildingSizeOutput = document.getElementById('building-size-output');
+
+// New inputs
+const buildingTypeInput = document.getElementById('building-type');
+const areaSqmInput = document.getElementById('area-sqm');
+const energyPeriodInput = document.getElementById('energy-period');
+const dgSizeInput = document.getElementById('dg-size');
+const renewableKwpInput = document.getElementById('renewable-kwp');
+const renewablePercentInput = document.getElementById('renewable-percent');
+const waterConsumptionInput = document.getElementById('water-consumption');
+const waterPeriodUnitInput = document.getElementById('water-period-unit');
+const recycledPercentInput = document.getElementById('recycled-percent');
+const recycledVolumeInput = document.getElementById('recycled-volume');
+const rwhInput = document.getElementById('rwh');
+ 
+// New outputs
+const buildingTypeOutput = document.getElementById('building-type-output');
+const areaOutput = document.getElementById('area-output');
+const dgSizeOutput = document.getElementById('dg-size-output');
+const renewableInstalledOutput = document.getElementById('renewable-installed-output');
+const waterConsumptionOutput = document.getElementById('water-consumption-output');
+const recycledOutput = document.getElementById('recycled-output');
+const rwhOutput = document.getElementById('rwh-output');
+// New outputs
+const renewableOutput = document.getElementById('renewable-output');
+const netStatusOutput = document.getElementById('net-status-output');
+const lpcdOutput = document.getElementById('lpcd-output');
+ 
+        calculateBtn.addEventListener('click', calculatePerformance);
+ 
+    	async function calculatePerformance() {
+  const selectedCity = cityDropdown.value;
+ 
+  // Pull new inputs
+  const buildingType = buildingTypeInput.value;
+  const areaSqm = parseFloat(areaSqmInput.value);           	// m²
+  let energyKWh = parseFloat(energyConsumptionInput.value); 	// kWh
+  const energyPeriod = energyPeriodInput.value;             	// 'annual' | 'monthly'
+  const coolingTR = parseFloat(coolingCapacityInput.value);
+  const contractDemandKVA = parseFloat(contractDemandInput.value);
+  const dgSize = parseFloat(dgSizeInput.value);
+  const renewableKwp = parseFloat(renewableKwpInput.value);
+  const renewablePct = parseFloat(renewablePercentInput.value);
+  const acAreaPercentage = parseFloat(acAreaPercentageInput.value);
+ 
+  // Water inputs
+  const waterValue = parseFloat(waterConsumptionInput.value);
+  const waterPeriodUnit = waterPeriodUnitInput.value;
+  const recycledPct = parseFloat(recycledPercentInput.value);
+  const recycledLitres = parseFloat(recycledVolumeInput.value);
+  const rwh = rwhInput.value; // 'Yes' | 'No'
+ 
+// Basic validation (only for existing fields)
+if (
+  !selectedCity ||
+  !buildingType ||
+  isNaN(areaSqm) || areaSqm <= 0 ||
+  isNaN(energyKWh) || energyKWh < 0 ||
+  isNaN(coolingTR) || coolingTR < 0 ||
+  isNaN(contractDemandKVA) || contractDemandKVA < 0 ||
+  isNaN(acAreaPercentage) || acAreaPercentage < 0 || acAreaPercentage > 100 ||
+  isNaN(waterValue) || waterValue < 0 ||
+  isNaN(recycledPct) || recycledPct < 0 || recycledPct > 100 ||
+  isNaN(recycledLitres) || recycledLitres < 0 ||
+  !waterPeriodUnit || !rwh
+) {
+  const alertModal = document.createElement('div');
+  alertModal.style.position = 'fixed';
+  alertModal.style.top = '50%';
+  alertModal.style.left = '50%';
+  alertModal.style.transform = 'translate(-50%, -50%)';
+  alertModal.style.padding = '20px';
+  alertModal.style.backgroundColor = 'white';
+  alertModal.style.border = '1px solid #d1d5db';
+  alertModal.style.borderRadius = '0.5rem';
+  alertModal.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+  alertModal.style.zIndex = '1000';
+  alertModal.textContent = 'Please fill in all fields with valid numbers.';
+  document.body.appendChild(alertModal);
+  setTimeout(() => { document.body.removeChild(alertModal); }, 3000);
+  return;
+}
+ 
+// Soft-validate renewable inputs if provided (outside the big if above)
+if (!isNaN(renewableKwp) && renewableKwp < 0) {
+  alert('Renewable kWp cannot be negative.'); return;
+}
+if (!isNaN(renewablePct) && (renewablePct < 0 || renewablePct > 100)) {
+  alert('Renewable % must be between 0 and 100.'); return;
+}
+ 
+
+
+  // Normalize energy → annual kWh
+  const energyAnnualKWh = (energyPeriod === 'monthly') ? (energyKWh * 12) : energyKWh;
+ 
+  // Area conversions
+  const areaSqft = areaSqm / 0.092903;
+ 
+  // Set city + climate
+  const locationData = cityData[selectedCity];
+  cityOutput.textContent = locationData.city;
+  climateZoneOutput.textContent = locationData.zone;
+ 
+  // Building size label
+  const buildingSize = getBuildingSize(areaSqm);
+  if (buildingSizeOutput) buildingSizeOutput.textContent = buildingSize;
+ 
+  // EPI
+  const epi = energyAnnualKWh / areaSqm;
+  epiOutput.textContent = `${epi.toFixed(2)} kWh/sqm/year`;
+ // ===== Assure EPI Comparison =====
+const ASSURE_EPI_TARGET = 75;
+let assureText = '', assureClass = '';
+
+if (epi <= ASSURE_EPI_TARGET) {
+  assureText = `${epi.toFixed(2)} — ✅ Within target`;
+  assureClass = 'rating-excellent';
+} else {
+  assureText = `${epi.toFixed(2)} — ⚠️ Above target`;
+  assureClass = 'rating-poor';
+}
+
+if (assureEpiOutput) {
+  assureEpiOutput.innerHTML = `<span class="rating-badge ${assureClass}">${assureText}</span>`;
+}
+   // ===== STAR RATING =====
+  let starRating = "N/A (BEE rating not applicable for this AC Area or building type)";
+  let starRatingColor = "#000000";
+ 
+  if (acAreaPercentage > 0 && acAreaPercentage <= 100) {
+    const eqByZone = beeEquations[locationData.zone];
+    const eq = eqByZone ? eqByZone[buildingSize] : null;
+ 
+	if (eq) {
+      const acPct = acAreaPercentage;
+ 
+      const epi5 = (eq['5Star'].a * acPct) + eq['5Star'].c;
+      const epi4 = (eq['4Star'].a * acPct) + eq['4Star'].c;
+      const epi3 = (eq['3Star'].a * acPct) + eq['3Star'].c;
+      const epi2 = (eq['2Star'].a * acPct) + eq['2Star'].c;
+      const epi1 = (eq['1Star'].a * acPct) + eq['1Star'].c;
+ 
+  	if (epi <= epi5)   	{ starRating = '5 Star'; starRatingColor = "#16a34a"; }
+      else if (epi <= epi4)  { starRating = '4 Star'; starRatingColor = "#34d399"; }
+      else if (epi <= epi3)  { starRating = '3 Star'; starRatingColor = "#f59e0b"; }
+      else if (epi <= epi2)  { starRating = '2 Star'; starRatingColor = "#dc2626"; }
+      else if (epi <= epi1)  { starRating = '1 Star'; starRatingColor = "#dc2626"; }
+      else               	{ starRating = 'No Star'; starRatingColor = "#dc2626"; }
+	}
+  }
+  starRatingOutput.textContent = starRating;
+  starRatingOutput.style.color = starRatingColor;
+// --- HVAC Sizing KPI (target 700–800 sqft/TR) ---
+let hvacText = '—';
+let hvacClass = 'rating-fair';
+if (coolingTR > 0 && areaSqft > 0) {
+  const sfPerTR = areaSqft / coolingTR;
+  if (sfPerTR >= 700 && sfPerTR <= 800) {
+    hvacText = `${sfPerTR.toFixed(0)} sqft/TR — Efficient sizing`;
+    hvacClass = 'rating-excellent';
+  } else if (sfPerTR < 700) {
+    hvacText = `${sfPerTR.toFixed(0)} sqft/TR — Oversized (low sqft/TR)`;
+    hvacClass = 'rating-poor';
+  } else {
+    hvacText = `${sfPerTR.toFixed(0)} sqft/TR — Possibly undersized (high sqft/TR)`;
+    hvacClass = 'rating-fair';
+  }
+}
+if (hvacSizingOutput) hvacSizingOutput.innerHTML = `<span class="rating-badge ${hvacClass}">${hvacText}</span>`;
+// ===== ESTIMATED RENEWABLE GENERATION & NET STATUS =====
+// Default specific yield for PV if only kWp is given (kWh/kWp/year)
+const DEFAULT_SPECIFIC_YIELD = 1500;
+ 
+// Compute estimated renewable generation
+let renewableGenKWh = 0;
+if (!isNaN(renewablePct) && renewablePct > 0) {
+  // If % of total demand is provided, prefer that
+  renewableGenKWh = energyAnnualKWh * (renewablePct / 100);
+} else if (!isNaN(renewableKwp) && renewableKwp > 0) {
+  // Otherwise, estimate from kWp
+  renewableGenKWh = renewableKwp * DEFAULT_SPECIFIC_YIELD;
+}
+ 
+// Show renewable generation (estimated) in dashboard
+if (renewableOutput) {
+  renewableOutput.textContent = `${Math.round(renewableGenKWh).toLocaleString()} kWh/yr (est.)`;
+}
+ 
+// Net Energy Status
+const EPS = Math.max(1, 0.005 * (energyAnnualKWh || 0)); // 0.5% or 1 kWh
+let netStatusText = '—', netStatusClass = '';
+if (renewableGenKWh - energyAnnualKWh > EPS) {
+  netStatusText = 'Net Positive';
+  netStatusClass = 'rating-excellent';
+} else if (Math.abs(renewableGenKWh - energyAnnualKWh) <= EPS) {
+  netStatusText = 'Net Zero';
+  netStatusClass = 'rating-good';
+} else {
+  netStatusText = 'Net Negative';
+  netStatusClass = 'rating-poor';
+}
+if (netStatusOutput) {
+  netStatusOutput.innerHTML = `<span class="rating-badge ${netStatusClass}">${netStatusText}</span>`;
+}
+ 
+
+// ================= GENERAL & ENERGY FIELD OUTPUTS ==================
+if (buildingTypeOutput) buildingTypeOutput.textContent = buildingType || '—';
+if (areaOutput) areaOutput.textContent = `${areaSqm.toLocaleString()} m²`;
+if (dgSizeOutput) dgSizeOutput.textContent = isNaN(dgSize) ? '—' : `${dgSize} kVA`;
+if (renewableInstalledOutput) {
+  const kwpStr = isNaN(renewableKwp) ? '—' : `${renewableKwp} kWp`;
+  const pctStr = isNaN(renewablePct) ? '—' : `${renewablePct}%`;
+  renewableInstalledOutput.textContent = `${kwpStr} / ${pctStr}`;
+}
+ 
+ 
+ 
+ // ===== WATER NORMALIZATION =====
+  let annualLitres;
+  switch (waterPeriodUnit) {
+	case 'monthly_litres': annualLitres = waterValue * 12; break;
+	case 'annual_m3':  	annualLitres = waterValue * 1000; break;
+	case 'monthly_m3': 	annualLitres = waterValue * 1000 * 12; break;
+    default:               annualLitres = waterValue; // annual_litres
+  }
+ 
+  if (waterConsumptionOutput) {
+    waterConsumptionOutput.textContent = `${Math.round(annualLitres).toLocaleString()} litres/year`;
+  }
+// --- Water Efficiency (NBC 45 lpcd) ---
+const NBC_LPCD = 45;
+let waterText = '—', waterClass = 'rating-fair';
+const lpcd = lpcdInput ? parseFloat(lpcdInput.value) : NaN;
+ 
+if (!isNaN(lpcd)) {
+  if (lpcd <= NBC_LPCD) {
+    waterText = `${lpcd.toFixed(1)} lpcd — Within NBC`;
+    waterClass = 'rating-excellent';
+  } else {
+    waterText = `${lpcd.toFixed(1)} lpcd — Above NBC`;
+    waterClass = 'rating-poor';
+  }
+} else {
+  waterText = `Not provided — NBC ref: ${NBC_LPCD} lpcd`;
+  waterClass = 'rating-fair';
+}
+if (waterEffOutput) waterEffOutput.innerHTML = `<span class="rating-badge ${waterClass}">${waterText}</span>`;
+  if (recycledOutput) {
+    recycledOutput.textContent =
+      `${isNaN(recycledPct) ? '—' : `${recycledPct}%`} ` +
+      `${isNaN(recycledLitres) ? '' : `(${Math.round(recycledLitres).toLocaleString()} L)`}`.trim();
+  }
+ 
+  if (rwhOutput) rwhOutput.textContent = rwh;
+ 
+  // If you still show LPCD in the dashboard but have no headcount, either remove that row,
+  // or set it to "— Not computed —". For now, just clear it:
+  if (lpcdOutput) {
+    lpcdOutput.textContent = '—';
+  }
+// --- Contract Demand / DG set sizing KPI (target < 5 W/sqft) ---
+const PF = 0.9;
+let demandText = '—', demandClass = 'rating-fair';
+if (areaSqft > 0) {
+  // Contract Demand in W/sf
+  const cdKW = (isNaN(contractDemandKVA) ? 0 : contractDemandKVA) * PF;
+  const cdWsf = (cdKW * 1000) / areaSqft;
+ 
+  // DG in W/sf (only if provided)
+  const dgKW  = (isNaN(dgSize) ? 0 : dgSize) * PF;
+  const dgWsf = (dgKW > 0) ? ((dgKW * 1000) / areaSqft) : null;
+ 
+  const cdOk = cdWsf > 0 && cdWsf < 5;
+  const dgOk = dgWsf === null ? true : dgWsf < 5; // if DG not given, don't penalize
+ 
+  if (cdOk && dgOk) {
+    demandText = `Contract: ${cdWsf.toFixed(2)} W/sqft${dgWsf !== null ? `, DG: ${dgWsf.toFixed(2)} W/sqft` : ''} — Efficient`;
+    demandClass = 'rating-excellent';
+  } else {
+    demandText = `Contract: ${cdWsf.toFixed(2)} W/sqft${dgWsf !== null ? `, DG: ${dgWsf.toFixed(2)} W/sqft` : ''} — Above target`;
+    demandClass = 'rating-poor';
+  }
+}
+if (demandKpiOutput) demandKpiOutput.innerHTML = `<span class="rating-badge ${demandClass}">${demandText}</span>`;         
+    	
+            dashboardSection.style.display = 'block';
+ 
+            try {
+  const docRef = await addDoc(
+    collection(db, `artifacts/${appId}/public/data/buildings`),
+	{
+      userId: userId,
+      city: selectedCity,
+      climateZone: locationData.zone,
+ 
+  	// Areas & energy
+      buildingSize: buildingSize,
+      acAreaPercentage: acAreaPercentage,
+      areaSqft: areaSqft,
+      areaSqm: areaSqm,
+      energyKWh: energyKWh,                 // raw input (monthly or annual)
+      energyAnnualKWh: energyAnnualKWh,     // normalized annual
+      epi: epi,
+ 
+  	// Renewables + net status
+      renewableKwp: isNaN(renewableKwp) ? null : renewableKwp,
+      renewablePct: isNaN(renewablePct) ? null : renewablePct,
+      renewableGenKWh: Math.round(renewableGenKWh),
+      netStatusText: netStatusText,
+      netStatusClass: netStatusClass,
+ 
+  	// Water
+      waterAnnualLitres: isNaN(annualLitres) ? null : annualLitres,
+      recycledPct: isNaN(recycledPct) ? null : recycledPct,
+      recycledLitres: isNaN(recycledLitres) ? null : recycledLitres,
+      rwh: rwh,
+ 
+  	// Equipment / demand
+      dgSizeKVA: isNaN(dgSize) ? null : dgSize,
+      coolingFactor: coolingFactor,
+      coolingRatingText: coolingRatingText,
+      coolingRatingClass: coolingRatingClass,
+      demandWsf: demandWsf,
+      demandRatingText: demandRatingText,
+      demandRatingClass: demandRatingClass,
+ 
+  	// Star rating
+      starRating: starRating,
+      starRatingColor: starRatingColor,
+ 
+  	// Timestamp
+      timestamp: serverTimestamp()
+	}
+  );
+  console.log("Document successfully written with ID:", docRef.id);
+} catch (e) {
+  console.error("Error adding document: ", e);
+}
+ 
+        }
+ 
+        initializeFirebase();
+    </script>
+</body>
+</html>
+ 
+
+

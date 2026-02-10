@@ -1,0 +1,782 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #1f2f5c;
+  color: #e5e7eb;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  margin-bottom: 6px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.card {
+  background: #2b3b73;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #3f4f8c;
+  padding-bottom: 6px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  margin-top: 4px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+
+.inline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #7fb239;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #6aa32f;
+}
+
+.result-block {
+  background: #223162;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.good {
+  color: #6ee7b7;
+}
+
+.bad {
+  color: #f87171;
+}
+
+.hidden {
+  display: none;
+}
+
+/* output secction css */
+
+.summary-metric {
+  margin-top: 10px;
+}
+
+.metric-value {
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.metric-good {
+  color: #6ee7b7;
+}
+
+.metric-bad {
+  color: #f87171;
+}
+
+/* KPI Row Layout */
+.kpi-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+  gap: 16px;
+}
+
+/* Left side */
+
+
+.kpi-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  flex: 0 0 45%;   /* 👈 fixed proportion, does NOT grow */
+  min-width: 320px; /* 👈 safe minimum for titles */
+}
+
+
+.kpi-icon {
+  font-size: 1.1rem;
+  margin-top: 2px;
+}
+
+.kpi-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  flex-shrink: 0;
+}
+
+.kpi-ref {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* Right side value */
+.kpi-right {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: right;
+  white-space: normal;   /* ✅ FIX */
+  line-height: 1;
+}
+
+.kpi-right .separator {
+  margin: 0 6px;
+  opacity: 0.6;
+}
+
+.kpi-right .kpi-status {
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* Status colors */
+.rating-excellent {
+  color: #2CBC33; /* green */
+}
+
+.rating-fair {
+  color: #facc15; /* amber */
+}
+
+.rating-poor {
+  color: #ef4444; /* red */
+}
+
+/* ===== Net Energy Status (text-only) ===== */
+
+.text-positive {
+  color: #22c55e; /* green */
+  font-weight: 600;
+}
+
+.text-neutral {
+  color: #b45309; /* amber */
+  font-weight: 600;
+}
+
+.text-negative {
+  color: #ef4444; /* red */
+  font-weight: 600;
+}
+
+
+.badge-positive {
+  color: #22c55e;
+}
+
+.badge-neutral {
+  color: #F7B980;
+}
+
+.badge-negative {
+  color: #ef4444;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+
+.results-refresh {
+  animation: refreshFlash 0.6s ease;
+}
+
+@keyframes refreshFlash {
+  0%   { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* built up area - occupancy - ac conditioned */
+
+.form-row {
+  display: grid;
+  gap: 16px;
+}
+
+.form-row.two-col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-label {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label-note {
+  font-size: 0.7rem;
+  color: #E6E6E6;
+  padding: 2px 1px;
+  border-radius: 999px;
+}
+
+/* Mobile friendly */
+@media (max-width: 768px) {
+  .form-row.two-col {
+    grid-template-columns: 1fr;
+  }
+}
+/* RESPONSIVE */
+@media (min-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* hvac and elctrical and dg contract */
+
+.kpi-right{
+  margin-top: 17px;
+}
+
+.kpi-split {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kpi-label {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-right: 6px;
+}
+
+.kpi-value {
+  font-weight: 600;
+}
+
+.kpi-status {
+  margin-top: 4px;
+  font-size: 0.8rem;
+}
+
+
+.kpi-note {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+
+
+
+/* Contract & DG numeric value colors */
+.kpi-value {
+  font-weight: 600;
+  color: #e5e7eb; /* default text */
+}
+
+/* When efficient */
+.rating-excellent .kpi-value {
+  color: #2CBC33; /* green */
+}
+
+/* When fair */
+.rating-fair .kpi-value {
+  color: #facc15; /* amber */
+}
+
+/* When poor */
+.rating-poor .kpi-value {
+  color: #ef4444; /* red */
+}
+
+/* Status text */
+.kpi-status.rating-excellent {
+  color: #2CBC33;
+}
+
+.kpi-status.rating-fair {
+  color: #facc15;
+}
+
+.kpi-status.rating-poor {
+  color: #ef4444;
+}
+
+
+
+/* ===== EPI BAR ===== */
+/* STAR SCALE */
+.epi-star-scale {
+  position: relative;
+  height: 56px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+/* STAR GROUP = POSITION ANCHOR */
+.epi-star-group {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* ⭐ THIS ensures perfect alignment */
+}
+
+/* STAR ICON (TOP) */
+.star-icon {
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+/* TICK (CENTER) */
+.star-tick {
+  width: 3px;
+  height: 12px;
+  background: #c0392b;
+  margin-bottom: 4px;
+}
+
+/* NUMBER (BOTTOM) */
+.star-num {
+  font-size: 12px;
+  color: #ffffff;
+  line-height: 1;
+}
+
+/* ===== EPI BAR ===== */
+.epi-card {
+  background: #223463;
+  color: #fff;
+  padding: 24px;
+  border-radius: 14px;
+}
+
+.epi-sub {
+  opacity: 0.85;
+  margin-bottom: 18px;
+}
+
+/* wrapper */
+.epi-bar-wrapper {
+  position: relative;
+  margin-top: 28px;
+}
+
+/* SCALE ensures bar + stars share width */
+.epi-scale {
+  position: relative;
+}
+
+/* BAR */
+.epi-bar {
+  position: relative;
+  height: 34px;
+  border-radius: 10px;
+  background: #dcdcdc;
+  margin-top: 3.8rem;
+  overflow: hidden;
+}
+
+/* COLOR ZONES (unchanged) */
+.epi-fill {
+  height: 100%;
+  width: 0%;
+  background: #2ecc71
+}
+
+/* MARKERS */
+.epi-marker {
+  position: absolute;
+  top: -6px;
+  height: 46px;
+  width: 4px;
+}
+
+.assure-marker {
+  background: red;
+  border-left: 2px dashed red;
+}
+
+.building-marker {
+  background: black;
+}
+
+/* LABEL BOXES */
+.epi-label {
+  position: absolute;
+  top: -58px;
+  background: #fff;
+  color: #000;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: top 0.2s ease;
+}
+
+.assure-label {
+  border-left: 4px solid red;
+}
+
+.building-label {
+  border-left: 4px solid black;
+}
+
+/* STAR TICKS (POSITIONED BY JS) */
+/* .star-tick {
+  position: absolute;
+  bottom: -6px;
+  width: 3px;
+  height: 12px;
+  background: #c0392b;
+  transform: translateX(-50%);
+} */
+
+
+/* STAR ROW */
+/* .epi-stars {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 0 6px;
+} */
+
+/* .epi-stars div {
+  width: 20%;
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+} */
+
+/* MESSAGE */
+.epi-message {
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+
+/* STAR SCALE CONTAINER */
+/* .epi-star-scale {
+  position: relative;
+  height: 30px;
+  margin-top: 14px;
+  width: 100%;          
+} */
+
+
+/* EACH STAR + TICK GROUP */
+/* .epi-star-group {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+} */
+
+/* reuse your tick style */
+/* .epi-star-group .star-tick {
+  position: static;
+  margin: 0 auto 4px;
+} */
+
+/* reuse your star text style */
+/* .epi-star-group .star-label {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+} */
+
+
+/* info hover button */
+
+/* Title row */
+.epi-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* Info icon */
+.epi-info {
+  position: relative;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.85;
+  user-select: none;
+}
+
+/* Tooltip box */
+.epi-tooltip {
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  background:white;          /* same card theme */
+  color: black;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  z-index: 10;
+}
+
+/* Tooltip arrow */
+.epi-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #223463 transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.epi-info:hover .epi-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+
+
+/* for bee star ratng */
+
+/* ===============================
+   BEE STAR RATING (FINAL)
+================================ */
+
+/* Wrapper block */
+.bee-rating-block {
+  margin-bottom: 16px;
+}
+
+/* Title */
+.bee-rating-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+/* Output container */
+.bee-rating-value {
+  margin-top: 10px;
+}
+
+/* Badge wrapper */
+.bee-rating-value .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  /* background: rgba(255, 255, 255, 0.06); */
+  border-radius: 8px;
+}
+
+/* Stars container */
+.bee-stars {
+  display: flex;
+  gap: 14px;              /* ⭐ equal spacing */
+}
+
+/* Individual star */
+.bee-star {
+  font-size: 22px;
+  line-height: 1;
+  transition: color 0.25s ease;
+}
+
+/* Filled star */
+.bee-star.filled {
+  color: #f5c542;         /* Gold */
+}
+
+/* Empty star */
+.bee-star.empty {
+  color: rgba(245, 197, 66, 0.25);
+}
+
+/* "(X Star)" text */
+.bee-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f5c542;
+  white-space: nowrap;
+}
+
+
+/* net energys attus */
+
+.net-energy-block {
+  margin-top: 12px;
+}
+
+.net-energy-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.net-energy-value {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Optional – improves readability */
+.badge-positive {
+  color: #2cbc33;
+}
+
+.badge-negative {
+  color: #c62828;
+}
+
+.badge-neutral {
+  color: #f9a825;
+}
+
+/* hvac contract demand */
+
+/* HVAC block */
+.hvac-block {
+  margin-top: 12px;
+}
+
+/* Title row */
+.hvac-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* Value row */
+.hvac-value {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Status colors (already using these classes) */
+.rating-excellent {
+  color: #2CBC33;
+}
+
+.rating-fair {
+  color: #f9a825;
+}
+
+.rating-poor {
+  color: #c62828;
+}
+
+/* dg set sizing contract demand */
+
+/* ELECTRICAL (CONTRACT + DG) */
+.electrical-block {
+  margin-top: 14px;
+}
+
+.electrical-item {
+  margin-bottom: 14px;
+}
+
+.electrical-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+
+  margin-bottom: 6px;
+}
+
+.electrical-value {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
