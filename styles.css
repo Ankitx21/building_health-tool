@@ -737,6 +737,72 @@ button:hover {
   color: #c62828;
 }
 
+/* ######################### Net energu bar ###################################3*/
+
+/* CARD */
+.net-energy-card {
+  margin-top: 24px;
+}
+
+.net-energy-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* BAR CONTAINER */
+.net-energy-bar {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e0e0e0;
+}
+
+/* EACH ROW */
+.net-energy-row {
+  position: relative;
+  height: 44px;                /* ✅ BIG ENOUGH FOR TEXT */
+  display: flex;
+  align-items: center;
+}
+
+/* FILLS */
+.net-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  transition: width 0.6s ease;
+}
+
+.net-energy-consumed {
+  background: #ff4d4d;
+}
+
+.net-energy-generated {
+  background: #2ecc71;
+}
+
+/* TEXT (ALWAYS VISIBLE) */
+.net-bar-text {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+/* MESSAGE */
+.net-energy-message {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+
+
 /* dg set sizing contract demand */
 
 /* ELECTRICAL (CONTRACT + DG) */

@@ -281,10 +281,8 @@ function calculateBuildingPerformance(inputs) {
 /* ---------- NET ENERGY (FINAL & CORRECT) ---------- */
 
   // Annual demand
-  const annualEnergyDemand =
-    energyPeriod === "monthly"
-      ? energyKWh * 12
-      : energyKWh;
+  const annualEnergyDemand = energyAnnualKWh;
+
 
   // Renewable generation (already annual kWh)
   const renewableGenKWh =
@@ -531,7 +529,14 @@ if (!isNaN(lpcd)) {
     city,
     climateZone,
     buildingSize,
+
+    /* ---------- ENERGY ---------- */
     epi,
+    annualEnergyDemand,     // ← used by Net Energy bar
+    renewableGenKWh,        // ← used by Net Energy bar
+    netEnergy,
+
+    /* ---------- EPI / STARS ---------- */
     epiThresholds: {
       oneStar: epi1,
       twoStar: epi2,
@@ -539,14 +544,17 @@ if (!isNaN(lpcd)) {
       fourStar: epi4,
       fiveStar: epi5
     },
+
     assureStatus,
-    netStatus,
     starRating,
+
+    /* ---------- KPIs ---------- */
+    netStatus,
     hvacSizing,
     demandSizing,
-    // hvacResult,
     waterStatus
   };
+
 }
 
 
@@ -734,6 +742,64 @@ function updateEpiBar({ epi, thresholds, assure, coldClimate = false }) {
   }
 }
 
+// Net energy bar staus
+
+function updateNetEnergyBar({ consumed, generated }) {
+
+  const conFill = document.querySelector(".net-energy-consumed");
+  const genFill = document.querySelector(".net-energy-generated");
+
+  const conText = document.getElementById("conText");
+  const genText = document.getElementById("genText");
+  const msg = document.getElementById("netEnergyMsg");
+
+  if (
+    isNaN(consumed) || consumed < 0 ||
+    isNaN(generated) || generated < 0
+  ) {
+    msg.innerHTML = "Result not available due to missing input(s).";
+    return;
+  }
+
+  const maxVal = Math.max(consumed, generated, 1);
+
+  const conPct = (consumed / maxVal) * 100;
+  const genPct = (generated / maxVal) * 100;
+
+  conFill.style.width = `${conPct}%`;
+  genFill.style.width = `${genPct}%`;
+
+  conText.textContent = `Consumed – ${Math.round(consumed)} kWh`;
+  genText.textContent = `Generated – ${Math.round(generated)} kWh`;
+
+  const diff = Math.round(generated - consumed);
+
+  if (diff > 0) {
+    msg.innerHTML = `
+      <span style="color:#2ecc71">
+        Net Positive: Generated &gt; Consumed (${diff} kWh surplus)
+      </span>
+    `;
+  }
+  else if (diff < 0) {
+    msg.innerHTML = `
+      <span style="color:#e74c3c">
+        Net Negative: Consumed &gt; Generated (${Math.abs(diff)} kWh deficit)
+      </span>
+    `;
+  }
+  else {
+    msg.innerHTML = `
+      <span style="color:#f1c40f">
+        Net Zero: Generated ≈ Consumed
+      </span>
+    `;
+  }
+}
+
+
+
+
 
 /*************************************************
  * ASSESS BUTTON (FINAL – VALIDATED)
@@ -803,34 +869,35 @@ function buildDemandLine(d) {
  *************************************************/
 function renderResults(r) {
 
-
-
   const beeEl = document.getElementById("outStarRating");
   const epiStarScale = document.getElementById("epiStarScale");
 
   /* ================= COLD CLIMATE HANDLING ================= */
-  if (r.starRating.text === COLD_CLIMATE_MESSAGE) {
+  const isColdClimate =
+    r.starRating.text === COLD_CLIMATE_MESSAGE;
 
-    // 1️⃣ Show cold-climate message in BEE rating
+  if (isColdClimate) {
+
+    // Show cold-climate message
     beeEl.innerHTML = `
       <span class="rating-neutral">
         ${COLD_CLIMATE_MESSAGE}
       </span>
     `;
 
-    // 2️⃣ HIDE stars below EPI bar
+    // Hide star scale
     if (epiStarScale) {
       epiStarScale.style.display = "none";
     }
 
   } else {
 
-    // ✅ Non-cold climate → SHOW star scale
+    // Show star scale
     if (epiStarScale) {
       epiStarScale.style.display = "block";
     }
 
-    /* ---------- EXISTING LOGIC (UNCHANGED) ---------- */
+    // Normal star rendering
     if (r.starRating.text === MISSING_RESULT_TEXT) {
       beeEl.innerHTML = `
         <span class="rating-fair">
@@ -856,112 +923,96 @@ function renderResults(r) {
     }
   }
 
-  document.getElementById("outNetEnergy").innerHTML =
-    `<span class="${r.netStatus.class}">
-      ${r.netStatus.text}
-    </span>`;
-
-
-/* ================= HVAC & ELECTRICAL ================= */
-document.getElementById("outHvac").innerHTML = `
-  <div class="hvac-block">
-    
-    <div class="hvac-title">
-      <span class="kpi-icon">❄️</span>
-      <span>
-        HVAC sizing (ASSURE KPI: 800 sqft/TR) :
-      </span>
-    </div>
-
-    <div class="hvac-value ${r.hvacSizing.class}">
-      ${r.hvacSizing.value || ""}
-      ${r.hvacSizing.status ? ` ${r.hvacSizing.status}` : ""}
-      ${r.hvacSizing.note ? ` (${r.hvacSizing.note})` : ""}
-    </div>
-
-  </div>
-`;
-
-
-document.getElementById("outDemand").innerHTML = `
-  <div class="electrical-block">
-
-    <!-- CONTRACT DEMAND -->
-    <div class="electrical-item">
-      <div class="electrical-title">
-        <span class="kpi-icon">⚡</span>
-        <span>
-          Contract Demand (ASSURE KPI: &lt; 5 W/sqft) :
-        </span>
+  /* ================= HVAC ================= */
+  document.getElementById("outHvac").innerHTML = `
+    <div class="hvac-block">
+      <div class="hvac-title">
+        <span class="kpi-icon">❄️</span>
+        <span>HVAC sizing (ASSURE KPI: 800 sqft/TR) :</span>
       </div>
-
-      <div class="electrical-value ${r.demandSizing.class}">
-        ${
-          r.demandSizing.contract !== "Not provided"
-            ? `${r.demandSizing.contract} — ${r.demandSizing.status}`
-            : `<span class="rating-fair">Result not available due to missing input(s).</span>`
-        }
+      <div class="hvac-value ${r.hvacSizing.class}">
+        ${r.hvacSizing.value || ""}
+        ${r.hvacSizing.status ? ` ${r.hvacSizing.status}` : ""}
+        ${r.hvacSizing.note ? ` (${r.hvacSizing.note})` : ""}
       </div>
     </div>
+  `;
 
-    <!-- DG SET -->
-    <div class="electrical-item">
-      <div class="electrical-title">
-        <span class="kpi-icon">⚡</span>
-        <span>
-          DG Set sizing (ASSURE KPI: &lt; 5 W/sqft) :
-        </span>
-      </div>
+  /* ================= ELECTRICAL ================= */
+  document.getElementById("outDemand").innerHTML = `
+    <div class="electrical-block">
 
-      <div class="electrical-value ${r.demandSizing.class}">
-        ${
-          r.demandSizing.dg !== "Not provided"
-            ? `${r.demandSizing.dg} — ${r.demandSizing.status}`
-            : `<span class="rating-fair">Result not available due to missing input(s).</span>`
-        }
-      </div>
-    </div>
-
-  </div>
-`;
-
-
-/* ================= WATER ================= */
-document.getElementById("outWater").innerHTML = `
-  <div class="kpi-row">
-    <div class="kpi-left">
-      <span class="kpi-icon">💧</span>
-      <div>
-        <div class="kpi-title">
-          Water Efficiency
-          <span class="kpi-ref">(NBC 45 lpcd)</span>
+      <div class="electrical-item">
+        <div class="electrical-title">
+          <span class="kpi-icon">⚡</span>
+          <span>Contract Demand (ASSURE KPI: &lt; 5 W/sqft) :</span>
+        </div>
+        <div class="electrical-value ${r.demandSizing.class}">
+          ${
+            r.demandSizing.contract !== "Not provided"
+              ? `${r.demandSizing.contract} — ${r.demandSizing.status}`
+              : `<span class="rating-fair">Result not available due to missing input(s).</span>`
+          }
         </div>
       </div>
+
+      <div class="electrical-item">
+        <div class="electrical-title">
+          <span class="kpi-icon">⚡</span>
+          <span>DG Set sizing (ASSURE KPI: &lt; 5 W/sqft) :</span>
+        </div>
+        <div class="electrical-value ${r.demandSizing.class}">
+          ${
+            r.demandSizing.dg !== "Not provided"
+              ? `${r.demandSizing.dg} — ${r.demandSizing.status}`
+              : `<span class="rating-fair">Result not available due to missing input(s).</span>`
+          }
+        </div>
+      </div>
+
     </div>
+  `;
 
-    <div class="kpi-right ${r.waterStatus.class}">
-      ${r.waterStatus.text}
+  /* ================= WATER ================= */
+  document.getElementById("outWater").innerHTML = `
+    <div class="kpi-row">
+      <div class="kpi-left">
+        <span class="kpi-icon">💧</span>
+        <div>
+          <div class="kpi-title">
+            Water Efficiency
+            <span class="kpi-ref">(NBC 45 lpcd)</span>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-right ${r.waterStatus.class}">
+        ${r.waterStatus.text}
+      </div>
     </div>
-  </div>
-`;
+  `;
 
-const isColdClimate =
-  r.starRating.text === COLD_CLIMATE_MESSAGE;
+  /* ================= EPI BAR ================= */
+  updateEpiBar({
+    epi: r.epi,
+    thresholds: isColdClimate ? null : r.epiThresholds,
+    assure: ASSURE_EPI_TARGET,
+    coldClimate: isColdClimate
+  });
 
-updateEpiBar({
-  epi: r.epi,
-  thresholds: isColdClimate ? null : r.epiThresholds,
-  assure: ASSURE_EPI_TARGET,
-  coldClimate: isColdClimate
-});
+  updateNetEnergyBar({
+  consumed: r.annualEnergyDemand,
+  generated: r.renewableGenKWh
+ });
+
 
   /* ================= SHOW RESULTS ================= */
-const resultsEl = document.getElementById("results");
+  const resultsEl = document.getElementById("results");
   resultsEl.classList.remove("hidden");
 
-  // Force refresh animation
   resultsEl.classList.remove("results-refresh");
-  void resultsEl.offsetWidth; // 👈 forces reflow
+  void resultsEl.offsetWidth; // force reflow
   resultsEl.classList.add("results-refresh");
 }
+
+
 

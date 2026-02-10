@@ -231,21 +231,35 @@
   <div class="epi-message" id="epiMessage"></div>
 </div>
 
+      <div class="net-energy-card">
+        <div class="net-energy-title">Net Energy Status</div>
 
+        <div class="net-energy-bar">
 
-
-
-        <div class="net-energy-block">
-          <div class="net-energy-title">
-            Net Energy Status :
+          <!-- Consumed (top bar) -->
+          <div class="net-energy-row consumed">
+            <div class="net-bar-fill net-energy-consumed"></div>
+            <div class="net-bar-text" id="conText">
+              Consumed – 0 kWh
+            </div>
           </div>
 
-          <div id="outNetEnergy" class="net-energy-value">
-            —
+          <!-- Generated (bottom bar) -->
+          <div class="net-energy-row generated">
+            <div class="net-bar-fill net-energy-generated"></div>
+            <div class="net-bar-text" id="genText">
+              Generated – 0 kWh
+            </div>
           </div>
+
         </div>
 
+        <div class="net-energy-message" id="netEnergyMsg"></div>
       </div>
+
+
+
+
 
       <!-- ================= HVAC & ELECTRICAL ================= -->
       <div class="result-block">
