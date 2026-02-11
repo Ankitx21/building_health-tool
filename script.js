@@ -110,11 +110,6 @@ const beeEquations = {
   }
 };
 
-
-/*************************************************
- * CITY → CLIMATE MAP
- *******************
-
 /*************************************************
  * CLIMATE + STATE + CITY DATA (SINGLE SOURCE)
  *************************************************/
@@ -252,6 +247,8 @@ function calculateBuildingPerformance(inputs) {
     occupants,
     // lpcd
   } = inputs;
+
+  let sfPerTR = null;
 
 
   /* ---------- ENERGY ---------- */
@@ -394,47 +391,50 @@ else {
 
 
 /* ================= HVAC SIZING KPI ================= */
-let hvacSizing = {
-  // value: "",
-  status: MISSING_RESULT_TEXT,
-  // note: "Enter Built-up Area and AC Capacity",
-  class: "rating-fair"
-};
+  /* ================= HVAC SIZING KPI ================= */
 
-if (areaSqft <= 0 || isNaN(areaSqft)) {
-  hvacSizing.note = "";
-}
-else if (isNaN(coolingTR) || coolingTR <= 0) {
-  hvacSizing.note = "";
-}
-else {
-  const sfPerTR = areaSqft / coolingTR;
+  let hvacSizing = {
+    value: "",
+    status: MISSING_RESULT_TEXT,
+    note: "",
+    class: "rating-fair",
+    sfPerTR: null
+  };
 
-  if (sfPerTR >= 700 && sfPerTR <= 800) {
-    hvacSizing = {
-      value: `${sfPerTR.toFixed(0)} sqft/TR`,
-      status: "Efficient sizing",
-      note: "Within recommended range",
-      class: "rating-excellent"
-    };
+  if (areaSqft > 0 && !isNaN(coolingTR) && coolingTR > 0) {
+
+    // ✅ ASSIGN, DO NOT DECLARE
+    sfPerTR = areaSqft / coolingTR;
+
+    if (sfPerTR >= 700 && sfPerTR <= 800) {
+      hvacSizing = {
+        value: `${sfPerTR.toFixed(0)} sqft/TR`,
+        status: "Efficient sizing",
+        note: "Within recommended range",
+        class: "rating-excellent",
+        sfPerTR
+      };
+    }
+    else if (sfPerTR < 700) {
+      hvacSizing = {
+        value: `${sfPerTR.toFixed(0)} sqft/TR`,
+        status: "Oversized",
+        note: "Low sqft/TR",
+        class: "rating-poor",
+        sfPerTR
+      };
+    }
+    else {
+      hvacSizing = {
+        value: `${sfPerTR.toFixed(0)} sqft/TR`,
+        status: "Possibly undersized",
+        note: "High sqft/TR",
+        class: "rating-fair",
+        sfPerTR
+      };
+    }
   }
-  else if (sfPerTR < 700) {
-    hvacSizing = {
-      value: `${sfPerTR.toFixed(0)} sqft/TR`,
-      status: "Oversized",
-      note: "Low sqft/TR",
-      class: "rating-poor"
-    };
-  }
-  else {
-    hvacSizing = {
-      value: `${sfPerTR.toFixed(0)} sqft/TR`,
-      status: "Possibly undersized",
-      note: "High sqft/TR",
-      class: "rating-fair"
-    };
-  }
-}
+
 
 /* ================= CONTRACT / DG SIZING KPI (STRUCTURED) ================= */
 const PF = 0.9;
@@ -551,6 +551,7 @@ if (!isNaN(lpcd)) {
     /* ---------- KPIs ---------- */
     netStatus,
     hvacSizing,
+    sfPerTR,
     demandSizing,
     waterStatus
   };
@@ -798,6 +799,75 @@ function updateNetEnergyBar({ consumed, generated }) {
 }
 
 
+// ############################ havc sizing bar ##################################
+
+function updateHvacBar(sfPerTR) {
+  if (!sfPerTR || isNaN(sfPerTR)) return;
+
+  const TARGET = 800;
+
+  const fill = document.querySelector(".hvac-fill");
+  
+  const buildingMarker = document.querySelector(".hvac-marker.building");
+  const targetMarker = document.querySelector(".hvac-marker.target");
+
+  const buildingLabel = document.getElementById("hvacBuildingLabel");
+  const buildingValue = document.getElementById("hvacBuildingValue");
+
+  /* ================= DYNAMIC SCALE ================= */
+  const AXIS_MAX = Math.max(sfPerTR, TARGET) * 1.2;
+  const pct = v => Math.min((v / AXIS_MAX) * 100, 100);
+
+  const buildingPct = pct(sfPerTR);
+  const targetPct = pct(TARGET);
+
+  /* ================= BAR WIDTH ================= */
+  fill.style.width = `${buildingPct}%`;
+
+  /* ================= POSITIONING ================= */
+  buildingMarker.style.left = `${buildingPct}%`;
+  targetMarker.style.left = `${targetPct}%`;
+  targetLabel = document.getElementById("hvacTargetLabel");
+  targetLabel.style.left = `${targetPct}%`;
+
+
+  buildingLabel.style.left = `${buildingPct}%`;
+  buildingValue.textContent = `${Math.round(sfPerTR)} sqft/TR`;
+
+  if (targetLabel) {
+    targetLabel.textContent = `800 sqft/TR`;
+  }
+
+  /* ================= STRICT COLOR LOGIC ================= */
+  const TOLERANCE = 1; // allow ±1 sqft/TR
+
+  let color;
+
+  if (Math.abs(sfPerTR - TARGET) <= TOLERANCE) {
+    color = "#2ecc71"; // GREEN (exact / acceptable)
+  }
+  else if (sfPerTR < TARGET) {
+    color = "#3498db"; // BLUE (more cooling provided)
+  }
+  else {
+    color = "#e74c3c"; // RED (less cooling provided)
+  }
+
+  /* ================= APPLY COLORS ================= */
+  fill.style.background = color;
+
+  // Change building marker circle color
+  buildingMarker.style.setProperty("--marker-color", color);
+
+  // Change floating label box
+  buildingLabel.style.background = color;
+  buildingLabel.style.borderColor = color;
+
+  // Change text color
+  buildingValue.style.color = "#ffffff";
+}
+
+
 
 
 
@@ -923,20 +993,10 @@ function renderResults(r) {
     }
   }
 
-  /* ================= HVAC ================= */
-  document.getElementById("outHvac").innerHTML = `
-    <div class="hvac-block">
-      <div class="hvac-title">
-        <span class="kpi-icon">❄️</span>
-        <span>HVAC sizing (ASSURE KPI: 800 sqft/TR) :</span>
-      </div>
-      <div class="hvac-value ${r.hvacSizing.class}">
-        ${r.hvacSizing.value || ""}
-        ${r.hvacSizing.status ? ` ${r.hvacSizing.status}` : ""}
-        ${r.hvacSizing.note ? ` (${r.hvacSizing.note})` : ""}
-      </div>
-    </div>
-  `;
+    /* ================= HVAC ================= */
+
+
+
 
   /* ================= ELECTRICAL ================= */
   document.getElementById("outDemand").innerHTML = `
@@ -1003,6 +1063,12 @@ function renderResults(r) {
   consumed: r.annualEnergyDemand,
   generated: r.renewableGenKWh
  });
+
+  if (r.sfPerTR) {
+    updateHvacBar(r.sfPerTR);
+  }
+
+
 
 
   /* ================= SHOW RESULTS ================= */

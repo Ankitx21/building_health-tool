@@ -737,6 +737,209 @@ button:hover {
   color: #c62828;
 }
 
+/* ================= HVAC VISUAL BAR ================= */
+
+/* ================= HVAC CARD ================= */
+
+.hvac-card {
+  margin-top: 20px;
+  padding: 14px 0;
+}
+
+.hvac-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+/* ================= BAR WRAPPER ================= */
+
+.hvac-bar-wrapper {
+  position: relative;
+  margin-top: 20px;
+}
+
+
+/* ================= HVAC BAR ================= */
+
+.hvac-bar {
+  position: relative;
+  margin-top: 4rem;
+  height: 50px;
+  background: #e0e0e0;  
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+
+/* Filled zone (blue → more cooling than needed) */
+.hvac-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #3498db;
+  border-radius: 14px 0 0 14px;
+}
+
+
+/* ================= MARKERS ================= */
+
+/* Common marker base */
+.hvac-marker {
+  position: absolute;
+  top: 8px;
+  height: 34px;
+  transform: translateX(-50%);
+}
+
+
+/* Building marker (circle + dotted line) */
+/* Building marker (circle + dotted line) */
+.hvac-marker.building::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: var(--marker-color, #3498db);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.hvac-marker.building::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  height: 22px;
+  border-left: 2px dashed var(--marker-color, #3498db);
+  transform: translateX(-50%);
+}
+
+
+
+/* Target marker (black circle + dotted stem) */
+.hvac-marker.target {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hvac-marker.target .target-dot {
+  width: 16px;
+  height: 16px;
+  border: 3px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  margin: 0 auto;
+}
+
+.hvac-marker.target::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  height: 20px;
+  border-left: 2px dashed #000;
+  transform: translateX(-50%);
+}
+
+
+/* ================= TARGET LABEL ================= */
+
+.target-label {
+  position: absolute;
+  top: 60px; /* below 50px bar */
+  transform: translateX(-50%);
+  font-size: 12px;
+  text-align: center;
+  color: #ffffff;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+
+
+/* ================= BUILDING FLOATING LABEL ================= */
+
+.hvac-building-label {
+  position: absolute;
+  top: -54px;
+  transform: translateX(-50%);
+  background: #0f2a4f;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  white-space: nowrap;
+}
+
+.hvac-building-label b {
+  color: #6dd5fa;
+  font-size: 13px;
+}
+
+
+/* ================= LEGEND ================= */
+
+.hvac-legend {
+  margin-top: 3rem;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hvac-legend .lg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hvac-legend .blue {
+  color: #6dd5fa;
+}
+
+.hvac-legend .red {
+  color: #e74c3c;
+}
+
+.hvac-legend .green {
+  color: #2ecc71;
+}
+
+/* Target value below bar */
+
+.hvac-target-label {
+  position: absolute;
+  top: 60px;                 /* below 50px bar */
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.target-value {
+  position: absolute;
+  top: 100px;              /* push below 50px bar */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 600;
+  color: blue;
+  white-space: nowrap;
+}
+
+
+
 /* ######################### Net energu bar ###################################3*/
 
 /* CARD */

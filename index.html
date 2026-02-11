@@ -257,14 +257,47 @@
         <div class="net-energy-message" id="netEnergyMsg"></div>
       </div>
 
-
-
-
-
       <!-- ================= HVAC & ELECTRICAL ================= -->
       <div class="result-block">
 
-        <div id="outHvac"></div>
+        <div id="outHvac" class="hvac-card">
+
+          <div class="hvac-title">
+            ❄️ HVAC sizing (ASSURE KPI: 800 sqft/TR)
+          </div>
+
+          <div class="hvac-bar-wrapper">
+
+            <div class="hvac-building-label" id="hvacBuildingLabel">
+              Your Building<br>
+              <b id="hvacBuildingValue">—</b>
+            </div>
+
+            <div class="hvac-bar">
+              <div class="hvac-fill"></div>
+
+              <div class="hvac-marker building"></div>
+
+              <div class="hvac-marker target">
+                <div class="target-dot"></div>
+              </div>
+            </div>
+
+            <!-- ✅ TARGET LABEL NOW HERE -->
+            <div class="hvac-target-label" id="hvacTargetLabel">
+              800 sqft/TR
+            </div>
+
+          </div>
+
+          <!-- Legends -->
+          <div class="hvac-legend">
+            <span class="lg blue">● More cooling provided than needed</span>
+            <span class="lg red">● Less cooling provided than needed</span>
+            <span class="lg green">● Right amount of cooling provided</span>
+          </div>
+
+        </div>
         <div id="outDemand"></div>
       </div>
 
